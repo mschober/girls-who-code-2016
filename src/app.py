@@ -68,3 +68,6 @@ if __name__ == '__main__':
     print_hal_letter(hal, HAL_HAL_5000_DOT)
     print_hal_letter(hal, HAL_HAL_5000_DOT_DOT)
     print_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
+    print
+    user_input = raw_input('> ')
+    print user_input
