@@ -45,9 +45,10 @@ def read_hal():
         hal = hal_file.readlines()
     return hal
 
-def print_hal(hal, offset):
-    for i in range(len(hal)):
-        print (hal[i][:offset + i])
+def print_hal(hal_ascii, offset):
+    for line in range(len(hal_ascii)):
+        slant_step = line #slant step is the amount of character increase as you go down the lines
+        print (hal_ascii[line][:offset + slant_step])
 
 def print_hal_letter(hal, offset):
     cls()
