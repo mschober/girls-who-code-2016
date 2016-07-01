@@ -97,7 +97,7 @@ def clean_user_input(user_input):
 
 if __name__ == '__main__':
     hal = read_hal()
-    # print_hal()
+    print_hal()
     display_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
 
     print
