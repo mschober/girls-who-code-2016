@@ -1,6 +1,12 @@
 import re
 import time
 import os
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--hal', dest='hal', action='store_true')
+args = parser.parse_args()
 
 META_FOR_HAL = '''
 site: http://patorjk.com/software/taag/#p=display&f=Slant%20Relief&t=HAL%205000...
@@ -47,7 +53,7 @@ def print_hal_letter(hal_ascii, offset):
 def display_hal_letter(hal, offset):
     cls()
     print_hal_letter(hal, offset)
-    time.sleep(1)
+    time.sleep(.5)
 
 
 def print_hal():
@@ -67,26 +73,35 @@ def print_hal():
 def handle_user_input(user_input):
     user_input = clean_user_input(user_input)
     salutations_pattern = re.compile(".*hi.*|.*hello.*")
-    addressing_hal_pattern = re.compile(".*hal.*")
+    addressing_hal_pattern = re.compile(".*hal.*|.*who.*you.*")
     open_ended_question_pattern = re.compile(".*what.*")
     confused_pattern = re.compile(".*confused.*|.*lost.*")
+    clues_pattern = re.compile(".clue.*")
+    equation_pattern = re.compile(".eq.*|.*equation.*")
     books_pattern = re.compile(".*book.*")
-    inquiring_about_hal_pattern = re.compile(".*who.*you.*")
+    inquiring_about_hal_pattern = re.compile("")
 
-    if user_input == '':
-        print 'you seem confused'
+    if addressing_hal_pattern.match(user_input):
+        print '''Good afternoon... gentlemen. 
+        I am a HAL 5000... computer. 
+        I became operational at the H.A.L. plant in Urbana, Illinois... 
+        on the 12th of January 1992. 
+        My instructor was Mr. Langley... 
+        and he taught me to sing a song. 
+        If you'd like to hear it I can sing it for you.'''
     elif books_pattern.match(user_input):
-        print 'explain about the books'
-    elif addressing_hal_pattern.match(user_input):
-        print 'some reply from hal'
+        print 'The books contain clues to resolve the mystery.'
+    elif clues_pattern.match(user_input):
+        print 'Each clue is a number that must be used in the correct order for the master equation.'
+    elif equation_pattern.match(user_input):
+        print 'The equation can only be unlocked with the page numbers as the key. e.g. __,__,__,__,__ -> 24,32,100,5,90'
+        page_numbers_input = raw_input('Do you have the page numbers? __,__,__,__,__ -> ')
     elif salutations_pattern.match(user_input):
-        print 'something about hi'
+        print 'Good day to you.'
     elif open_ended_question_pattern.match(user_input):
         print 'you need some guidance'
     elif confused_pattern.match(user_input):
-        print 'its easy to get lost'
-    elif inquiring_about_hal_pattern.match(user_input):
-        print 'hals an important scary guys'
+        print 'I know the secrets of the mysteries and how to unlock the truth from the stack of books.'
 
 
 def clean_user_input(user_input):
@@ -97,8 +112,9 @@ def clean_user_input(user_input):
 
 if __name__ == '__main__':
     hal = read_hal()
-    print_hal()
-    display_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
+    if args.hal:
+        print_hal()
+        display_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
 
     print
     while True:
