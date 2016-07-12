@@ -77,13 +77,15 @@ def explain_to_user_how_page_key_works(page_numbers_input):
 
 def calculate_percent_match(page_numbers_input):
     expected_page_key = [
-            10,11,12,13,14
+            32,64,128,256,512
             ]
 
     page_numbers_ints = [ int(page) for page in page_numbers_input.split(',') ]
     page_mapping_filter = map(lambda x: x in expected_page_key, page_numbers_ints)
     percent_same = ((page_mapping_filter).count(True) * 1.0 / 5) * 100
-    print 'You discovered {0} percent page numbers so far {1}'.format(percent_same, list(compress(page_numbers_ints, page_mapping_filter)))
+    list_matches = list(compress(page_numbers_ints, page_mapping_filter))
+    list_matches.sort()
+    print 'You discovered {0} percent page numbers so far {1}'.format(percent_same, list_matches)
     return percent_same
 
 def handle_page_input(page_numbers_input):
