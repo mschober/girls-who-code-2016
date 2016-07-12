@@ -2,6 +2,7 @@ import re
 import time
 import os
 import argparse
+from itertools import compress
 
 
 parser = argparse.ArgumentParser()
@@ -69,17 +70,43 @@ def print_hal():
     display_hal_letter(hal, HAL_HAL_5000_DOT_DOT)
     display_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
 
+def explain_to_user_how_page_key_works(page_numbers_input):
+    print '''You need to provide a list of numbers delimited by commas e.g. __,__,__,__,__ -> 24,32,100,5,90
+            I only see {0} from you'''.format(page_numbers_input)
+
+
+def calculate_percent_match(page_numbers_input):
+    expected_page_key = [
+            10,11,12,13,14
+            ]
+
+    page_numbers_ints = [ int(page) for page in page_numbers_input.split(',') ]
+    page_mapping_filter = map(lambda x: x in expected_page_key, page_numbers_ints)
+    percent_same = ((page_mapping_filter).count(True) * 1.0 / 5) * 100
+    print 'You discovered {0} percent page numbers so far {1}'.format(percent_same, list(compress(page_numbers_ints, page_mapping_filter)))
+    return percent_same
+
+def handle_page_input(page_numbers_input):
+    page_key = page_numbers_input.split(',')
+    if len(page_key) != 5:
+        explain_to_user_how_page_key_works(page_numbers_input)
+        return
+
+    perc_match = calculate_percent_match(page_numbers_input)
+    if (perc_match == 100):
+        print 'win'
+
 
 def handle_user_input(user_input):
     user_input = clean_user_input(user_input)
     salutations_pattern = re.compile(".*hi.*|.*hello.*")
     addressing_hal_pattern = re.compile(".*hal.*|.*who.*you.*")
     open_ended_question_pattern = re.compile(".*what.*")
-    confused_pattern = re.compile(".*confused.*|.*lost.*")
-    clues_pattern = re.compile(".clue.*")
+    confused_pattern = re.compile(".*confused.*|.*lost.*|.*help.*")
+    clues_pattern = re.compile(".*clue.*")
     equation_pattern = re.compile(".eq.*|.*equation.*")
     books_pattern = re.compile(".*book.*")
-    inquiring_about_hal_pattern = re.compile("")
+    #inquiring_about_hal_pattern = re.compile("")
 
     if addressing_hal_pattern.match(user_input):
         print '''Good afternoon... gentlemen. 
@@ -96,6 +123,7 @@ def handle_user_input(user_input):
     elif equation_pattern.match(user_input):
         print 'The equation can only be unlocked with the page numbers as the key. e.g. __,__,__,__,__ -> 24,32,100,5,90'
         page_numbers_input = raw_input('Do you have the page numbers? __,__,__,__,__ -> ')
+        handle_page_input(page_numbers_input)
     elif salutations_pattern.match(user_input):
         print 'Good day to you.'
     elif open_ended_question_pattern.match(user_input):
