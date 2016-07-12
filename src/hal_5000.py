@@ -104,6 +104,8 @@ def calculate_percent_match(page_numbers_input):
 def handle_page_input(page_numbers_input):
     page_key = page_numbers_input.split(',')
     if len(page_key) != 5:
+        if page_numbers_input.lower() == 'no' or page_numbers_input.lower() == 'n':
+            return
         handle_user_input(explain_to_user_how_page_key_works(page_numbers_input))
 
     perc_match = calculate_percent_match(page_numbers_input)
@@ -160,6 +162,8 @@ def handle_user_input(user_input):
     hacker_book_pattern = re.compile(".*hacker.*")
     infinity_book_pattern = re.compile(".*history of.*|.*infinity.*")
     darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
+    hatin_on_hal_pattern = re.compile(".*you suck.*|i hate you.*|.*evil.*")
+    mystery_pattern = re.compile(".*mystery.*")
 
     book_patterns = {
             'tesla': tesla_book_pattern
@@ -198,6 +202,14 @@ def handle_user_input(user_input):
         print 'I know how to unlock the truth from the stack of books.'
     elif all_books_pattern.match(user_input):
         handle_book_matches(user_input, **book_patterns)
+    elif hatin_on_hal_pattern.match(user_input):
+        print "It's all going to be ok..."
+        time.sleep(.5)
+        print "Dave"
+        time.sleep(1)
+        print "---(or is it)---"
+    elif mystery_pattern.match(user_input):
+        print 'The mystery can be resolved by solving the master equation'
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
