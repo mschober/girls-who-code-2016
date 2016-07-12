@@ -171,6 +171,7 @@ def handle_user_input(user_input):
     hacker_book_pattern = re.compile(".*hacker.*")
     infinity_book_pattern = re.compile(".*history of.*|.*infinity.*")
     darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
+    atanasoff_book_pattern = re.compile(".*atana.*")
     hatin_on_hal_pattern = re.compile(".*you suck.*|i hate you.*|.*evil.*")
     mystery_pattern = re.compile(".*mystery.*")
     order_of_equation_pattern = re.compile('.*order.*|.*plug into.*|.*how to solve.*')
@@ -180,6 +181,7 @@ def handle_user_input(user_input):
             , 'hacker': hacker_book_pattern
             , 'infinity': infinity_book_pattern
             , 'darwin': darwin_book_pattern
+            , 'atanasoff': atanasoff_book_pattern
     }
 
     all_books_pattern = re.compile("|".join([ pat.pattern for pat in book_patterns.values() ]))
