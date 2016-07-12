@@ -83,14 +83,14 @@ def explain_to_user_how_page_key_works(page_numbers_input):
 def show_the_equation_and_get_inputs():
     the_equation = 'b / (math.floor(c / float(d)) / a + e ) + 1'
     equation_handler(
-        the_equation + ' e.g. __,__,__,__,__ -> 24,32,100,5,90'
-        ,  'What values will you use for the equation? -> __,__,__,__,__'
+        the_equation
+        ,  'What values will you use for the equation?  __,__,__,__,__ ->'
     )
 
 
 def calculate_percent_match(page_numbers_input):
     expected_page_key = [
-            32,64,128,256,512
+            32,64,128,259,512
             ]
 
     page_numbers_ints = [ int(page) for page in page_numbers_input.split(',') ]
@@ -112,10 +112,37 @@ def handle_page_input(page_numbers_input):
         print 'win'
 
 
-def handle_book_matches(user_input, *book_patterns):
-    for pat in book_patterns:
-        print pat.pattern
+def handle_book_matches(user_input, **book_patterns):
 
+    print 'I can give you page numbers and paragraphs in these books that will help you solve the master equation.'
+
+    for pat_name, pat in book_patterns.iteritems():
+        if pat.match(user_input):
+            if pat_name == 'atanasoff':
+                print '''John Vincent Atanasoff (JVA) was born on 4 October 1903 a few miles west of Hamilton, New York. His father was a Bulgarian immigrant named Ivan Atanasov. Ivan's name was changed to John Atanasoff by immigration officials at Ellis Island, when he arrived with an uncle in 1889.
+                The obsession with finding a solution to the computing problem built to a frenzy in the winter months of 1937. One night, frustrated after many discouraging events, he got into his car and started driving without a destination in mind. Two hundred miles later, he pulled onto a roadhouse in the state of Illinois. Here, he had a drink of bourbon and continued thinking about the creation of the machine. No longer nervous and tense, he realized that this thoughts were coming together clearly.'''
+                print '0000100000p001'
+            if pat_name == 'tesla':
+                print '''Inventor Nikola Tesla was born in July of 1856, in what is now Croatia. 
+                He came to the United States in 1884 and briefly worked with Thomas Edison before the two parted ways. 
+                He sold several patent rights, including those to his alternating-current machinery, to George Westinghouse. 
+                His 1891 invention, the "Tesla coil," is still used in radio technology today. Tesla died in New York City on January 7, 1943.
+
+                One day he watched his professor attempt to control the troublesome sparking of a direct-current (DC) motor's brush commutator 
+                copper-wire electrical contacts that reverse the current twice during each rotation so that the resulting opposing magnetic fields keep the rotor turning. 
+                Tesla suggested that it might be possible to design a motor without a commutator. 
+                Annoyed by the student's impudence, Poeschl lectured on the impossibility of creating such a motor, 
+                concluding: "Mr. Tesla may accomplish great things, but he certainly never will do this."'''
+                print '0001000000p001'
+            if pat_name == 'hacker':
+                print 'found hacker'
+                print '0010000000p001'
+            if pat_name == 'infinity':
+                print 'found infinity'
+                print '0100000011p001'
+            if pat_name == 'darwin':
+                print 'found darwin'
+                print '1000000000p100'
 
 def equation_handler(string_about_numbers, format_for_raw_input):
     print string_about_numbers
@@ -127,21 +154,21 @@ def handle_user_input(user_input):
     addressing_hal_pattern = re.compile(".*hal.*|.*who.*you.*")
     confused_pattern = re.compile(".*confused.*|.*lost.*|.*help.*")
     clues_pattern = re.compile(".*clue.*")
-    equation_pattern = re.compile(".eq.*|.*equation.*")
+    equation_pattern = re.compile(".eq.*|.*equation.*|.*master.*")
     book_pattern = re.compile(".*book.*")
     tesla_book_pattern = re.compile(".*tesla.*")
     hacker_book_pattern = re.compile(".*hacker.*")
     infinity_book_pattern = re.compile(".*history of.*|.*infinity.*")
     darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
 
-    book_patterns = [
-        tesla_book_pattern
-        , hacker_book_pattern
-        , infinity_book_pattern
-        , darwin_book_pattern
-    ]
+    book_patterns = {
+            'tesla': tesla_book_pattern
+            , 'hacker': hacker_book_pattern
+            , 'infinity': infinity_book_pattern
+            , 'darwin': darwin_book_pattern
+    }
 
-    all_books_pattern = re.compile("|".join([ pat.pattern for pat in book_patterns ]))
+    all_books_pattern = re.compile("|".join([ pat.pattern for pat in book_patterns.values() ]))
 
     #inquiring_about_hal_pattern = re.compile("")
 
@@ -170,7 +197,7 @@ def handle_user_input(user_input):
         time.sleep(.5)
         print 'I know how to unlock the truth from the stack of books.'
     elif all_books_pattern.match(user_input):
-        handle_book_matches(user_input, *book_patterns)
+        handle_book_matches(user_input, **book_patterns)
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
