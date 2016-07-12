@@ -137,13 +137,22 @@ def handle_book_matches(user_input, **book_patterns):
                 concluding: "Mr. Tesla may accomplish great things, but he certainly never will do this."'''
                 print '0001000000p001'
             if pat_name == 'hacker':
-                print 'found hacker'
+                print '''written by the cyberpunk novelist Bruce Sterling was released in 1992, it was a hugely acclaimed journalistic study of the cyberspace of the 
+                late 80s and early 90s detailing the affairs and people who have influenced this chaotic electronic frontier. 
+                Written during a period when the modern day Internet was taking it's first steps, 
+                this book is a historic chronicle of the outlaw culture of the electronic frontier right from it's beginner days'''
                 print '0010000000p001'
             if pat_name == 'infinity':
-                print 'found infinity'
+                print '''The subject of infinity would probably strike most readers familiar with Wallace as perfectly suited to his recursive style, and this book is as weird and wonderful as you'd expect. '''
                 print '0100000011p001'
             if pat_name == 'darwin':
-                print 'found darwin'
+                print '''The book is a response to various debates of Darwin's time far more wide-ranging than the questions he raised in Origin. 
+                It is often erroneously assumed that the book was controversial because it was the first to outline the idea of human evolution and common descent. 
+                Coming out so late into that particular debate, while it was clearly Darwin's intent to weigh in on this question, 
+                his goal was to approach it through a specific theoretical lens (sexual selection), which other commentators at the period had not discussed, 
+                and consider the evolution of morality and religion. 
+                The theory of sexual selection was also needed to counter the argument that beauty with no obvious utility, such as exotic birds' plumage, 
+                proved divine design, which had been put strongly by the Duke of Argyll in his book The Reign of Law (1868)'''
                 print '1000000000p100'
 
 def equation_handler(string_about_numbers, format_for_raw_input):
@@ -164,6 +173,7 @@ def handle_user_input(user_input):
     darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
     hatin_on_hal_pattern = re.compile(".*you suck.*|i hate you.*|.*evil.*")
     mystery_pattern = re.compile(".*mystery.*")
+    order_of_equation_pattern = re.compile('.*order.*|.*plug into.*|.*how to solve.*')
 
     book_patterns = {
             'tesla': tesla_book_pattern
@@ -210,6 +220,8 @@ def handle_user_input(user_input):
         print "---(or is it)---"
     elif mystery_pattern.match(user_input):
         print 'The mystery can be resolved by solving the master equation'
+    elif order_of_equation_pattern.match(user_input):
+        print 'Powers of two are dear to my heart.'
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
