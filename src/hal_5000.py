@@ -6,8 +6,14 @@ import math
 from itertools import compress
 #18 / (math.floor(79449/float(1877)) / 6 + 2 ) + 1
 #b / (math.floor(c / float(d)) / a + e ) + 1 = answer
-
-
+# equation should not care about order
+# track the winner numbers whenever the land
+# need to collapse dupes on the page numbers
+# more matchers on the inputs
+# book names should be more important than clues
+# everything and more is in the title matcher for infinity
+# need to have hooks for race case numbers
+# more explanation of what to do with the binary pages and paragraphs
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
