@@ -3,6 +3,9 @@ import time
 import os
 import argparse
 from itertools import compress
+#18 / (math.floor(79449/float(1877)) / 6 + 2 ) + 1
+#b / (math.floor(c / float(d)) / a + e ) + 1 = answer
+
 
 
 parser = argparse.ArgumentParser()
@@ -71,8 +74,18 @@ def print_hal():
     display_hal_letter(hal, HAL_HAL_5000_DOT_DOT_DOT)
 
 def explain_to_user_how_page_key_works(page_numbers_input):
-    print '''You need to provide a list of numbers delimited by commas e.g. __,__,__,__,__ -> 24,32,100,5,90
-            I only see {0} from you'''.format(page_numbers_input)
+    return equation_handler(
+        'You need to provide a list of numbers delimited by commas e.g. __,__,__,__,__ -> 24,32,100,5,90'
+        , 'I only see {0} from you\nDo you have the page numbers? __,__,__,__,__ -> '.format(page_numbers_input)
+    )
+
+
+def show_the_equation_and_get_inputs():
+    the_equation = 'b / (math.floor(c / float(d)) / a + e ) + 1'
+    equation_handler(
+        the_equation + ' e.g. __,__,__,__,__ -> 24,32,100,5,90'
+        ,  'What values will you use for the equation? -> __,__,__,__,__'
+    )
 
 
 def calculate_percent_match(page_numbers_input):
@@ -91,23 +104,45 @@ def calculate_percent_match(page_numbers_input):
 def handle_page_input(page_numbers_input):
     page_key = page_numbers_input.split(',')
     if len(page_key) != 5:
-        explain_to_user_how_page_key_works(page_numbers_input)
-        return
+        handle_user_input(explain_to_user_how_page_key_works(page_numbers_input))
 
     perc_match = calculate_percent_match(page_numbers_input)
     if (perc_match == 100):
+        show_the_equation_and_get_inputs()
         print 'win'
 
+
+def handle_book_matches(user_input, *book_patterns):
+    for pat in book_patterns:
+        print pat.pattern
+
+
+def equation_handler(string_about_numbers, format_for_raw_input):
+    print string_about_numbers
+    return raw_input(format_for_raw_input)
 
 def handle_user_input(user_input):
     user_input = clean_user_input(user_input)
     salutations_pattern = re.compile(".*hi.*|.*hello.*")
     addressing_hal_pattern = re.compile(".*hal.*|.*who.*you.*")
-    open_ended_question_pattern = re.compile(".*what.*")
     confused_pattern = re.compile(".*confused.*|.*lost.*|.*help.*")
     clues_pattern = re.compile(".*clue.*")
     equation_pattern = re.compile(".eq.*|.*equation.*")
-    books_pattern = re.compile(".*book.*")
+    book_pattern = re.compile(".*book.*")
+    tesla_book_pattern = re.compile(".*tesla.*")
+    hacker_book_pattern = re.compile(".*hacker.*")
+    infinity_book_pattern = re.compile(".*history of.*|.*infinity.*")
+    darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
+
+    book_patterns = [
+        tesla_book_pattern
+        , hacker_book_pattern
+        , infinity_book_pattern
+        , darwin_book_pattern
+    ]
+
+    all_books_pattern = re.compile("|".join([ pat.pattern for pat in book_patterns ]))
+
     #inquiring_about_hal_pattern = re.compile("")
 
     if addressing_hal_pattern.match(user_input):
@@ -118,21 +153,24 @@ def handle_user_input(user_input):
         My instructor was Mr. Langley... 
         and he taught me to sing a song. 
         If you'd like to hear it I can sing it for you.'''
-    elif books_pattern.match(user_input):
+    elif book_pattern.match(user_input):
         print 'The books contain clues to resolve the mystery.'
     elif clues_pattern.match(user_input):
         print 'Each clue is a number that must be used in the correct order for the master equation.'
     elif equation_pattern.match(user_input):
-        print 'The equation can only be unlocked with the page numbers as the key. e.g. __,__,__,__,__ -> 24,32,100,5,90'
-        page_numbers_input = raw_input('Do you have the page numbers? __,__,__,__,__ -> ')
+        page_numbers_input = equation_handler(
+                'The equation can only be unlocked with the page numbers as the key. e.g. __,__,__,__,__ -> 24,32,100,5,90'
+                , 'Do you have the page numbers? __,__,__,__,__ -> '
+        )
         handle_page_input(page_numbers_input)
     elif salutations_pattern.match(user_input):
         print 'Good day to you.'
-    elif open_ended_question_pattern.match(user_input):
-        print 'you need some guidance'
     elif confused_pattern.match(user_input):
-        print 'I know the secrets of the mysteries and how to unlock the truth from the stack of books.'
-
+        print 'You need some guidance.'
+        time.sleep(.5)
+        print 'I know how to unlock the truth from the stack of books.'
+    elif all_books_pattern.match(user_input):
+        handle_book_matches(user_input, *book_patterns)
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
