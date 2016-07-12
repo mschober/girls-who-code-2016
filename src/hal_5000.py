@@ -152,7 +152,7 @@ def handle_book_matches(user_input, **book_patterns):
             if pat_name == 'atanasoff':
                 print '''John Vincent Atanasoff (JVA) was born on 4 October 1903 a few miles west of Hamilton, New York. His father was a Bulgarian immigrant named Ivan Atanasov. Ivan's name was changed to John Atanasoff by immigration officials at Ellis Island, when he arrived with an uncle in 1889.
                 The obsession with finding a solution to the computing problem built to a frenzy in the winter months of 1937. One night, frustrated after many discouraging events, he got into his car and started driving without a destination in mind. Two hundred miles later, he pulled onto a roadhouse in the state of Illinois. Here, he had a drink of bourbon and continued thinking about the creation of the machine. No longer nervous and tense, he realized that this thoughts were coming together clearly.'''
-                print '0000100000p001'
+                print '0000100000p100'
             if pat_name == 'tesla':
                 print '''Inventor Nikola Tesla was born in July of 1856, in what is now Croatia. 
                 He came to the United States in 1884 and briefly worked with Thomas Edison before the two parted ways. 
@@ -173,7 +173,7 @@ def handle_book_matches(user_input, **book_patterns):
                 print '0010000000p001'
             if pat_name == 'infinity':
                 print '''The subject of infinity would probably strike most readers familiar with Wallace as perfectly suited to his recursive style, and this book is as weird and wonderful as you'd expect. '''
-                print '0100000011p001'
+                print '0100000011p010'
             if pat_name == 'darwin':
                 print '''The book is a response to various debates of Darwin's time far more wide-ranging than the questions he raised in Origin. 
                 It is often erroneously assumed that the book was controversial because it was the first to outline the idea of human evolution and common descent. 
@@ -182,7 +182,7 @@ def handle_book_matches(user_input, **book_patterns):
                 and consider the evolution of morality and religion. 
                 The theory of sexual selection was also needed to counter the argument that beauty with no obvious utility, such as exotic birds' plumage, 
                 proved divine design, which had been put strongly by the Duke of Argyll in his book The Reign of Law (1868)'''
-                print '1000000000p100'
+                print '1000000000p010'
 
 def equation_handler(string_about_numbers, format_for_raw_input):
     print string_about_numbers
