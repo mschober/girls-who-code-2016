@@ -101,6 +101,7 @@ def calculate_percent_match(page_numbers_input):
             32,64,128,259,512
             ]
 
+    print page_numbers_input
     page_numbers_ints = [ int(page) for page in page_numbers_input.split(',') ]
     page_mapping_filter = map(lambda x: x in expected_page_key, page_numbers_ints)
     percent_same = ((page_mapping_filter).count(True) * 1.0 / 5) * 100
@@ -133,7 +134,7 @@ def handle_page_input(page_numbers_input):
     if len(page_key) != 5:
         if page_numbers_input.lower() == 'no' or page_numbers_input.lower() == 'n':
             return
-        handle_user_input(explain_to_user_how_page_key_works(page_numbers_input))
+        handle_page_input(explain_to_user_how_page_key_works(page_numbers_input))
 
     perc_match = calculate_percent_match(page_numbers_input)
     if (perc_match == 100):
