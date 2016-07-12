@@ -2,6 +2,7 @@ import re
 import time
 import os
 import argparse
+import math
 from itertools import compress
 #18 / (math.floor(79449/float(1877)) / 6 + 2 ) + 1
 #b / (math.floor(c / float(d)) / a + e ) + 1 = answer
@@ -39,6 +40,8 @@ HAL_HAL = 55
 HAL_HA = 35
 
 HAL_H = 19
+
+THE_EQUATION = '{0} / (math.floor({1} / float({2})) / {3} + {4} ) + 1'
 
 
 def cls():
@@ -81,11 +84,16 @@ def explain_to_user_how_page_key_works(page_numbers_input):
 
 
 def show_the_equation_and_get_inputs():
-    the_equation = 'b / (math.floor(c / float(d)) / a + e ) + 1'
-    equation_handler(
-        the_equation
-        ,  'What values will you use for the equation?  __,__,__,__,__ ->'
-    )
+    eq_values = equation_handler(
+        THE_EQUATION.format('b', 'c', 'd', 'a', 'e')
+        ,  'What values will you use for the equation?  __,__,__,__,__ -> (e.g b,c,d,a,e) '
+    ).split(',')
+
+    if len(eq_values) != 5:
+        show_the_equation_and_get_inputs()
+    else:
+        eq_values_ints = [ int(value) for value in eq_values ]
+        return eq_values_ints
 
 
 def calculate_percent_match(page_numbers_input):
@@ -101,6 +109,25 @@ def calculate_percent_match(page_numbers_input):
     print 'You discovered {0} percent page numbers so far {1}'.format(percent_same, list_matches)
     return percent_same
 
+def calculate_eq(eq_values):
+    formula_str = THE_EQUATION.format(*eq_values)
+    print formula_str
+    ans = eval(formula_str)
+    return ans
+
+def handle_equation_input(eq_values):
+    def print_dot(cnt, wait):
+        time.sleep(wait)
+        print '.' * cnt
+
+    print 'Let me compute the solution for you...'
+
+    for x in range(5):
+        print_dot(x, .4)
+
+    print 'I have an answer for you'
+    print calculate_eq(eq_values)
+
 def handle_page_input(page_numbers_input):
     page_key = page_numbers_input.split(',')
     if len(page_key) != 5:
@@ -110,7 +137,8 @@ def handle_page_input(page_numbers_input):
 
     perc_match = calculate_percent_match(page_numbers_input)
     if (perc_match == 100):
-        show_the_equation_and_get_inputs()
+        eq_values = show_the_equation_and_get_inputs()
+        handle_equation_input(eq_values)
         print 'win'
 
 
