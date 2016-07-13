@@ -6,12 +6,13 @@ import math
 from itertools import compress
 #18 / (math.floor(79449/float(1877)) / 6 + 2 ) + 1
 #b / (math.floor(c / float(d)) / a + e ) + 1 = answer
+
 # equation should not care about order
 # track the winner numbers whenever the land
-# need to collapse dupes on the page numbers
-# more matchers on the inputs
-# book names should be more important than clues
-# everything and more is in the title matcher for infinity
+# --need to collapse dupes on the page numbers
+# --more matchers on the inputs
+# --book names should be more important than clues
+# --everything and more is in the title matcher for infinity
 # need to have hooks for race case numbers
 # more explanation of what to do with the binary pages and paragraphs
 
@@ -108,10 +109,11 @@ def calculate_percent_match(page_numbers_input):
             ]
 
     print page_numbers_input
-    page_numbers_ints = [ int(page) for page in page_numbers_input.split(',') ]
-    page_mapping_filter = map(lambda x: x in expected_page_key, page_numbers_ints)
+    int_page_numbers = [ int(page) for page in page_numbers_input.split(',') ]
+    set_page_numbers = set(int_page_numbers)
+    page_mapping_filter = map(lambda x: x in expected_page_key, set_page_numbers)
     percent_same = ((page_mapping_filter).count(True) * 1.0 / 5) * 100
-    list_matches = list(compress(page_numbers_ints, page_mapping_filter))
+    list_matches = list(compress(set_page_numbers, page_mapping_filter))
     list_matches.sort()
     print 'You discovered {0} percent page numbers so far {1}'.format(percent_same, list_matches)
     return percent_same
@@ -204,11 +206,11 @@ def handle_user_input(user_input):
     book_pattern = re.compile(".*book.*")
     tesla_book_pattern = re.compile(".*tesla.*")
     hacker_book_pattern = re.compile(".*hacker.*")
-    infinity_book_pattern = re.compile(".*history of.*|.*infinity.*")
+    infinity_book_pattern = re.compile(".*history of.*|.*infinity.*|.*everything.*|.*and more.*")
     darwin_book_pattern = re.compile(".*darwin.*|.*decent.*|.*of man.*")
     atanasoff_book_pattern = re.compile(".*atana.*")
     hatin_on_hal_pattern = re.compile(".*you suck.*|i hate you.*|.*evil.*")
-    mystery_pattern = re.compile(".*mystery.*")
+    mystery_pattern = re.compile(".*mystery.*|.*truth.*")
     order_of_equation_pattern = re.compile('.*order.*|.*plug into.*|.*how to solve.*')
 
     book_patterns = {
@@ -231,34 +233,34 @@ def handle_user_input(user_input):
         My instructor was Mr. Langley... 
         and he taught me to sing a song. 
         If you'd like to hear it I can sing it for you.'''
-    elif book_pattern.match(user_input):
-        print 'The books contain clues to resolve the mystery.'
-    elif clues_pattern.match(user_input):
-        print 'Each clue is a number that must be used in the correct order for the master equation.'
     elif equation_pattern.match(user_input):
         page_numbers_input = equation_handler(
                 'The equation can only be unlocked with the page numbers as the key. e.g. __,__,__,__,__ -> 24,32,100,5,90'
                 , 'Do you have the page numbers? __,__,__,__,__ -> '
         )
         handle_page_input(page_numbers_input)
-    elif salutations_pattern.match(user_input):
-        print 'Good day to you.'
+    elif all_books_pattern.match(user_input):
+        handle_book_matches(user_input, **book_patterns)
+    elif book_pattern.match(user_input):
+        print 'The books contain clues to resolve the mystery.'
+    elif clues_pattern.match(user_input):
+        print 'Each clue is a number that must be used in the correct order for the master equation.'
+    elif mystery_pattern.match(user_input):
+        print 'The mystery can be resolved by solving the master equation'
+    elif order_of_equation_pattern.match(user_input):
+        print 'Powers of two are dear to my heart.'
     elif confused_pattern.match(user_input):
         print 'You need some guidance.'
         time.sleep(.5)
         print 'I know how to unlock the truth from the stack of books.'
-    elif all_books_pattern.match(user_input):
-        handle_book_matches(user_input, **book_patterns)
     elif hatin_on_hal_pattern.match(user_input):
         print "It's all going to be ok..."
         time.sleep(.5)
         print "Dave"
         time.sleep(1)
         print "---(or is it)---"
-    elif mystery_pattern.match(user_input):
-        print 'The mystery can be resolved by solving the master equation'
-    elif order_of_equation_pattern.match(user_input):
-        print 'Powers of two are dear to my heart.'
+    elif salutations_pattern.match(user_input):
+        print 'Good day to you.'
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
