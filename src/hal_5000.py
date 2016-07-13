@@ -14,7 +14,7 @@ from itertools import compress
 # --book names should be more important than clues
 # --everything and more is in the title matcher for infinity
 # need to have hooks for race case numbers
-# more explanation of what to do with the binary pages and paragraphs
+# --more explanation of what to do with the binary pages and paragraphs
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
@@ -153,7 +153,12 @@ def handle_page_input(page_numbers_input):
 
 def handle_book_matches(user_input, **book_patterns):
 
-    print 'I can give you page numbers and paragraphs in these books that will help you solve the master equation.'
+    print '''I can give you page numbers and paragraphs in these books that will help you solve the master equation.
+    Each book contains a single number to be used in the equation. You must find the page and paragaph where the number hides.
+    Numbers may be explicit, spelled out as a word, or be clear based on the topic of the paragraph. The format of the location is as follows...
+
+    Page: [0-1]{10}p[0-1]{3} which means ten binary digits for the page and three binary digits for the paragraph. 
+    '''
 
     for pat_name, pat in book_patterns.iteritems():
         if pat.match(user_input):
