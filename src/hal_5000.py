@@ -283,9 +283,9 @@ def handle_user_input(user_input):
         time.sleep(.5)
         return 'I know how to unlock the truth from the stack of books.'
     elif hatin_on_hal_pattern.match(user_input):
-        return "It's all going to be ok..."
+        print "It's all going to be ok..."
         time.sleep(.5)
-        return "Dave"
+        print "Dave"
         time.sleep(1)
         return "---(or is it)---"
     elif salutations_pattern.match(user_input):
