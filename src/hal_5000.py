@@ -15,6 +15,7 @@ from itertools import compress
 # --everything and more is in the title matcher for infinity
 # need to have hooks for race case numbers
 # --more explanation of what to do with the binary pages and paragraphs
+# if user asks for pages ask for which book
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
@@ -49,6 +50,8 @@ HAL_HA = 35
 HAL_H = 19
 
 THE_EQUATION = '{0} / (math.floor({1} / float({2})) / {3} + {4} ) + 1'
+# global_equation_matches = ['?', '?', '?', '?', '?']
+# global_found_equation = False
 
 
 def cls():
@@ -146,6 +149,7 @@ def handle_page_input(page_numbers_input):
 
     perc_match = calculate_percent_match(page_numbers_input)
     if (perc_match == 100):
+    #    global_found_equation = True
         eq_values = show_the_equation_and_get_inputs()
         handle_equation_input(eq_values)
         print 'win'
@@ -163,11 +167,12 @@ def handle_book_matches(user_input, **book_patterns):
     for pat_name, pat in book_patterns.iteritems():
         if pat.match(user_input):
             if pat_name == 'atanasoff':
-                print '''John Vincent Atanasoff (JVA) was born on 4 October 1903 a few miles west of Hamilton, New York. His father was a Bulgarian immigrant named Ivan Atanasov. Ivan's name was changed to John Atanasoff by immigration officials at Ellis Island, when he arrived with an uncle in 1889.
-                The obsession with finding a solution to the computing problem built to a frenzy in the winter months of 1937. One night, frustrated after many discouraging events, he got into his car and started driving without a destination in mind. Two hundred miles later, he pulled onto a roadhouse in the state of Illinois. Here, he had a drink of bourbon and continued thinking about the creation of the machine. No longer nervous and tense, he realized that this thoughts were coming together clearly.'''
-                print '0000100000p100'
+                return '''John Vincent Atanasoff (JVA) was born on 4 October 1903 a few miles west of Hamilton, New York. His father was a Bulgarian immigrant named Ivan Atanasov. Ivan's name was changed to John Atanasoff by immigration officials at Ellis Island, when he arrived with an uncle in 1889.
+                The obsession with finding a solution to the computing problem built to a frenzy in the winter months of 1937. One night, frustrated after many discouraging events, he got into his car and started driving without a destination in mind. Two hundred miles later, he pulled onto a roadhouse in the state of Illinois. Here, he had a drink of bourbon and continued thinking about the creation of the machine. No longer nervous and tense, he realized that this thoughts were coming together clearly.
+
+                0000100000p100'''
             if pat_name == 'tesla':
-                print '''Inventor Nikola Tesla was born in July of 1856, in what is now Croatia. 
+                return '''Inventor Nikola Tesla was born in July of 1856, in what is now Croatia. 
                 He came to the United States in 1884 and briefly worked with Thomas Edison before the two parted ways. 
                 He sold several patent rights, including those to his alternating-current machinery, to George Westinghouse. 
                 His 1891 invention, the "Tesla coil," is still used in radio technology today. Tesla died in New York City on January 7, 1943.
@@ -176,26 +181,30 @@ def handle_book_matches(user_input, **book_patterns):
                 copper-wire electrical contacts that reverse the current twice during each rotation so that the resulting opposing magnetic fields keep the rotor turning. 
                 Tesla suggested that it might be possible to design a motor without a commutator. 
                 Annoyed by the student's impudence, Poeschl lectured on the impossibility of creating such a motor, 
-                concluding: "Mr. Tesla may accomplish great things, but he certainly never will do this."'''
-                print '0001000000p001'
+                concluding: "Mr. Tesla may accomplish great things, but he certainly never will do this."
+
+                0001000000p001'''
             if pat_name == 'hacker':
-                print '''written by the cyberpunk novelist Bruce Sterling was released in 1992, it was a hugely acclaimed journalistic study of the cyberspace of the 
+                return '''written by the cyberpunk novelist Bruce Sterling was released in 1992, it was a hugely acclaimed journalistic study of the cyberspace of the 
                 late 80s and early 90s detailing the affairs and people who have influenced this chaotic electronic frontier. 
                 Written during a period when the modern day Internet was taking it's first steps, 
-                this book is a historic chronicle of the outlaw culture of the electronic frontier right from it's beginner days'''
-                print '0010000000p001'
+                this book is a historic chronicle of the outlaw culture of the electronic frontier right from it's beginner days
+
+                0010000000p001'''
             if pat_name == 'infinity':
-                print '''The subject of infinity would probably strike most readers familiar with Wallace as perfectly suited to his recursive style, and this book is as weird and wonderful as you'd expect. '''
-                print '0100000011p010'
+                return '''The subject of infinity would probably strike most readers familiar with Wallace as perfectly suited to his recursive style, and this book is as weird and wonderful as you'd expect. 
+
+                 0100000011p010'''
             if pat_name == 'darwin':
-                print '''The book is a response to various debates of Darwin's time far more wide-ranging than the questions he raised in Origin. 
+                return '''The book is a response to various debates of Darwin's time far more wide-ranging than the questions he raised in Origin. 
                 It is often erroneously assumed that the book was controversial because it was the first to outline the idea of human evolution and common descent. 
                 Coming out so late into that particular debate, while it was clearly Darwin's intent to weigh in on this question, 
                 his goal was to approach it through a specific theoretical lens (sexual selection), which other commentators at the period had not discussed, 
                 and consider the evolution of morality and religion. 
                 The theory of sexual selection was also needed to counter the argument that beauty with no obvious utility, such as exotic birds' plumage, 
-                proved divine design, which had been put strongly by the Duke of Argyll in his book The Reign of Law (1868)'''
-                print '1000000000p010'
+                proved divine design, which had been put strongly by the Duke of Argyll in his book The Reign of Law (1868)
+
+                1000000000p010'''
 
 def equation_handler(string_about_numbers, format_for_raw_input):
     print string_about_numbers
@@ -217,6 +226,7 @@ def handle_user_input(user_input):
     hatin_on_hal_pattern = re.compile(".*you suck.*|i hate you.*|.*evil.*")
     mystery_pattern = re.compile(".*mystery.*|.*truth.*")
     order_of_equation_pattern = re.compile('.*order.*|.*plug into.*|.*how to solve.*')
+    pages_pattern = re.compile('.*what page.*|.*page.*')
 
     book_patterns = {
             'tesla': tesla_book_pattern
@@ -231,7 +241,7 @@ def handle_user_input(user_input):
     #inquiring_about_hal_pattern = re.compile("")
 
     if addressing_hal_pattern.match(user_input):
-        print '''Good afternoon... gentlemen. 
+        return '''Good afternoon... gentlemen. 
         I am a HAL 5000... computer. 
         I became operational at the H.A.L. plant in Urbana, Illinois... 
         on the 12th of January 1992. 
@@ -245,27 +255,29 @@ def handle_user_input(user_input):
         )
         handle_page_input(page_numbers_input)
     elif all_books_pattern.match(user_input):
-        handle_book_matches(user_input, **book_patterns)
+        return handle_book_matches(user_input, **book_patterns)
     elif book_pattern.match(user_input):
-        print 'The books contain clues to resolve the mystery.'
+        return 'The books contain clues to resolve the mystery.'
+    elif pages_pattern.match(user_input):
+        return 'For which book?'
     elif clues_pattern.match(user_input):
-        print 'Each clue is a number that must be used in the correct order for the master equation.'
+        return 'Each clue is a number that must be used in the correct order for the master equation.'
     elif mystery_pattern.match(user_input):
-        print 'The mystery can be resolved by solving the master equation'
+        return 'The mystery can be resolved by solving the master equation'
     elif order_of_equation_pattern.match(user_input):
-        print 'Powers of two are dear to my heart.'
+        return 'Powers of two are dear to my heart.'
     elif confused_pattern.match(user_input):
-        print 'You need some guidance.'
+        return 'You need some guidance.'
         time.sleep(.5)
-        print 'I know how to unlock the truth from the stack of books.'
+        return 'I know how to unlock the truth from the stack of books.'
     elif hatin_on_hal_pattern.match(user_input):
-        print "It's all going to be ok..."
+        return "It's all going to be ok..."
         time.sleep(.5)
-        print "Dave"
+        return "Dave"
         time.sleep(1)
-        print "---(or is it)---"
+        return "---(or is it)---"
     elif salutations_pattern.match(user_input):
-        print 'Good day to you.'
+        return 'Good day to you.'
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
@@ -282,5 +294,5 @@ if __name__ == '__main__':
     print
     while True:
         user_input = raw_input('> ')
-        handle_user_input(user_input)
+        print handle_user_input(user_input)
 
