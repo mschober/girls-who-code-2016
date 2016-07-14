@@ -1,5 +1,6 @@
 from unittest import TestCase
 from src.hal_5000 import handle_user_input
+import re
 
 class TestHal5000(TestCase):
 #    salutations_pattern = re.compile(".*hi.*|.*hello.*")
@@ -35,17 +36,26 @@ class TestHal5000(TestCase):
                 , 'clue': 'Each clue is a number that must be used in the correct order for the master equation.'
                 #, 'equation': 'The books contain clues to resolve the mystery.'
                 , 'book': 'The books contain clues to resolve the mystery.'
-                #, 'tesla': 'The books contain clues to resolve the mystery.'
-                #, 'hacker': 'The books contain clues to resolve the mystery.'
-                #, 'everything': 'The books contain clues to resolve the mystery.'
-                #, 'decent': 'The books contain clues to resolve the mystery.'
-                #, 'atanasoff': 'The books contain clues to resolve the mystery.'
-                #, 'hate': 'The books contain clues to resolve the mystery.'
                 , 'mystery': 'The mystery can be resolved by solving the master equation'
                 , 'order': 'Powers of two are dear to my heart.'
                 , 'pages': 'For which book?'
         }
 
         for input, reply in user_inputs.iteritems():
-            #self.assertEquals(input, reply)
             self.assertEquals(reply, handle_user_input(input), "Key: {0}, for output '{1}'".format(input, handle_user_input(input)))
+
+    def test_book_replies(self):
+        user_inputs = {
+                  'tesla': 'but he certainly never'
+                , 'hacker': 'The books contain clues to resolve the mystery.'
+                , 'everything': 'The books contain clues to resolve the mystery.'
+                , 'decent': 'The books contain clues to resolve the mystery.'
+                , 'atanasoff': 'The books contain clues to resolve the mystery.'
+        }
+
+        for user_input, string_partial in user_inputs.iteritems():
+            matcher = re.compile('.*{0}.*'.format(string_partial))
+            #self.assertEquals(True, matcher.match(handle_user_input(user_input)), "Key: {0}, for output '{1}'".format(user_input, handle_user_input(user_input)))
+            matches = [ matcher.match(line) for line in handle_user_input(user_input).split('\n') ]
+            self.assertEquals([], matches)
+

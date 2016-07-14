@@ -62,6 +62,12 @@ def read_hal():
         hal = hal_file.readlines()
     return hal
 
+def read_song():
+	with open('src/song.txt', 'r') as song_file:
+		song = song_file.readlines()
+	return song
+
+
 def print_hal_letter(hal_ascii, offset):
     for line in range(len(hal_ascii)):
         slant_step = line #slant step is the amount of character increase as you go down the lines
@@ -72,6 +78,11 @@ def display_hal_letter(hal, offset):
     print_hal_letter(hal, offset)
     time.sleep(.5)
 
+def display_song():
+	song = read_song()
+	for line in song:
+		print line,
+		time.sleep(.4)
 
 def print_hal():
     display_hal_letter(hal, HAL_H)
@@ -227,6 +238,7 @@ def handle_user_input(user_input):
     mystery_pattern = re.compile(".*mystery.*|.*truth.*")
     order_of_equation_pattern = re.compile('.*order.*|.*plug into.*|.*how to solve.*')
     pages_pattern = re.compile('.*what page.*|.*page.*')
+    sing_for_me_pattern = re.compile('.*sing.*')
 
     book_patterns = {
             'tesla': tesla_book_pattern
@@ -267,7 +279,7 @@ def handle_user_input(user_input):
     elif order_of_equation_pattern.match(user_input):
         return 'Powers of two are dear to my heart.'
     elif confused_pattern.match(user_input):
-        return 'You need some guidance.'
+        print 'You need some guidance.'
         time.sleep(.5)
         return 'I know how to unlock the truth from the stack of books.'
     elif hatin_on_hal_pattern.match(user_input):
@@ -278,6 +290,12 @@ def handle_user_input(user_input):
         return "---(or is it)---"
     elif salutations_pattern.match(user_input):
         return 'Good day to you.'
+    elif mystery_pattern.match(user_input):
+        return 'The mystery can be resolved by solving the master equation'
+    elif order_of_equation_pattern.match(user_input):
+        return 'I read the books in order, you should too.'
+    elif sing_for_me_pattern.match(user_input):
+		display_song()
 
 def clean_user_input(user_input):
     user_input = user_input.strip()
@@ -294,5 +312,7 @@ if __name__ == '__main__':
     print
     while True:
         user_input = raw_input('> ')
-        print handle_user_input(user_input)
+        to_print_string = handle_user_input(user_input)
+        if to_print_string:
+            print to_print_string
 
