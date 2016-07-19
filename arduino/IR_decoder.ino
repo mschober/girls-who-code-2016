@@ -19,7 +19,7 @@
 
 // the maximum pulse we'll listen for - 65 milliseconds is a long time
 #define MAXPULSE 65000
-#define NUMPULSES 50
+#define NUMPULSES 160
 
 // what our timing resolution should be, larger is better
 // as its more 'precise' - but too large and you wont get
@@ -30,10 +30,10 @@
 #define FUZZINESS 20
 
 
-#define ONE_ON_TIME 45
+#define ONE_ON_TIME 60
 #define ONE_OFF_TIME 115
 
-#define ZERO_ON_TIME 45
+#define ZERO_ON_TIME 60
 #define ZERO_OFF_TIME 35
 
 // we will store up to 100 pulse pairs (this is -a lot-)
@@ -70,7 +70,7 @@ void loop(void) {
 }
 
 // #define DEBUG_TWO
- #define DEBUG_ONE
+// #define DEBUG_ONE
 // #define DEBUG_THREE
 
 boolean isAOne(int oncode, int offcode) {
@@ -140,30 +140,45 @@ void printCodes(int oncode, int offcode, char* digitVal) {
 
 char IRConvertToBinary(int count){
   unsigned char output = 0;
+  unsigned char message[(count/8) +1];
+
+  memcpy( message, 0, (count/8)+1);
+  int index = 0;
+  for( int _bit=0; _bit < count; _bit++)
+  {
+    //for 8 bits
+
+      // current bit on
+      int oncode = pulses[_bit][1] * RESOLUTION / 10;
   
-  //for 8 bits
-  for (int i=41; i< 49; i++) {
-    // current bit on
-    int oncode = pulses[i][1] * RESOLUTION / 10;
-
-    // current bit off
-    int offcode = pulses[i+1][0] * RESOLUTION / 10;
-    
-    if( isAOne(oncode,offcode) ) {
-      output |= 1 << i - 41;
-      #ifdef DEBUG_ONE
-        printCodes(oncode ,offcode, "1");
-      #endif
-    } else if ( isAZero(oncode, offcode) ) {
-      //seems important, but not sure what todo
-      ;
-      #ifdef DEBUG_ONE
-        printCodes(oncode, offcode, "0");   
-      #endif
-    } 
-    printCodes(oncode, offcode, ".");
-
+      // current bit off
+      int offcode = pulses[_bit+1][0] * RESOLUTION / 10;
+      
+      if( isAOne(oncode,offcode) ) {
+        output |= 1 << (7-(_bit%8));
+        #ifdef DEBUG_ONE
+          printCodes(oncode ,offcode, "1");
+        #endif
+      } else if ( isAZero(oncode, offcode) ) {
+        //seems important, but not sure what todo
+        ;
+        #ifdef DEBUG_ONE
+          printCodes(oncode, offcode, "0");   
+        #endif
+      } 
+      //printCodes(oncode, offcode, ".");
+  
+    if ( _bit % 8 == 0 ){
+       //then you have a character ready to do something with
+       message[index] = output;
+       index++;
+      //Serial.print("<");
+      Serial.write(output);
+      //Serial.print(">");
+      output = 0; 
+    }
   }
+  Serial.println("");
  // Everything matched!
  return output;
 }
@@ -290,4 +305,3 @@ void printpulses(void) {
   Serial.print(pulses[currentpulse-1][1] * RESOLUTION / 10, DEC);
   Serial.print(", 0};");
 }
-
