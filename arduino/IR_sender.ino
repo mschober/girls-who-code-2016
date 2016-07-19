@@ -3,11 +3,12 @@
 // this code is public domain, please enjoy!
 
 
-#define ONE_ON_TIME 45
-#define ONE_OFF_TIME 115
+#define SCALAR 10
+#define ONE_ON_TIME 45 * SCALAR
+#define ONE_OFF_TIME 115 * SCALAR
 
-#define ZERO_ON_TIME 45
-#define ZERO_OFF_TIME 35
+#define ZERO_ON_TIME 45 * SCALAR
+#define ZERO_OFF_TIME 35 * SCALAR
 
 int IRledPin =  12;    // LED connected to digital pin 12
 int buttonPin = 3;     // footswitch connected to digital #3
@@ -23,7 +24,7 @@ void setup()   {
   pinMode(buttonPin, INPUT);
   digitalWrite(buttonPin, HIGH); // pullup on
 
-  strcpy(message, "Hello, world!");
+  strcpy(message, " Hello, world!  ");
   Serial.begin(9600);
 }
 
@@ -126,4 +127,3 @@ void SendCanonCode() {
   delayMicroseconds(3440);
   pulseIR(480);
 }
-
