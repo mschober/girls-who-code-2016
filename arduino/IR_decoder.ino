@@ -138,7 +138,12 @@ void printCodes(int oncode, int offcode, char* digitVal) {
     Serial.println(digitVal);
 }
 
+#define FORCE_MESSAGE_LENGTH_ONE_CHAR
+
 char IRConvertToBinary(int count){
+#ifdef FORCE_MESSAGE_LENGTH_ONE_CHAR
+  count = 8;
+#endif
   unsigned char output = 0;
   unsigned char message[(count/8) +1];
 
