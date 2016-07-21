@@ -18,6 +18,7 @@ from itertools import compress
 # if user asks for pages ask for which book
 # if no action after finding book (or other hook) for some amount of time, recommend more collaborative (or parallel) work
 # the flow chart for hal should be more tansparent and consistent amongst teams
+# in the book output, make it more obvious or clear that the paragraphs are dead weight
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
