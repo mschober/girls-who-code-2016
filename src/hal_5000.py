@@ -9,6 +9,9 @@ from itertools import compress
 
 # equation should not care about order
 # track the winner numbers whenever the land
+# dumb bug that it gives win no matter what
+# make sure its obvious loss if not 3.0
+# print 3.0 in ascii art
 # --need to collapse dupes on the page numbers
 # --more matchers on the inputs
 # --book names should be more important than clues
