@@ -19,6 +19,8 @@ from itertools import compress
 # if no action after finding book (or other hook) for some amount of time, recommend more collaborative (or parallel) work
 # the flow chart for hal should be more tansparent and consistent amongst teams
 # in the book output, make it more obvious or clear that the paragraphs are dead weight
+# if hal had a global count down timer that gave away clues at time intervals
+# hello and hi are not looping back to the important work
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
