@@ -21,6 +21,7 @@ from itertools import compress
 # in the book output, make it more obvious or clear that the paragraphs are dead weight
 # if hal had a global count down timer that gave away clues at time intervals
 # hello and hi are not looping back to the important work
+# it did crash several times, work on testing and smoke testing
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--hal', dest='hal', action='store_true')
